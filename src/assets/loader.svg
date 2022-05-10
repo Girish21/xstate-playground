@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id='loader' fill="none" viewBox="0 0 24 24">
+    <path fill-rule="evenodd" clip-rule="evenodd"
+      d="M16.0461 18.9028C15.0935 19.2423 14.0674 19.4272 12.9982 19.4272C8.41707 19.4272 4.62847 16.0339 4.0087 11.6237C4.00292 11.7484 4 11.8739 4 12C4 16.4183 7.58172 20 12 20C13.4762 20 14.8591 19.6002 16.0461 18.9028Z"
+      fill="currentColor" />
+  </symbol>
+</svg>
