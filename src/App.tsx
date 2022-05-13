@@ -4,6 +4,7 @@ import { Wrapper, Fallback } from './components'
 
 const IndexPage = React.lazy(() => import('./Pages'))
 const Stopwatch = React.lazy(() => import('./Pages/stopwatch'))
+const Keyboard = React.lazy(() => import('./Pages/keyboard'))
 
 export default function App() {
   return (
@@ -23,6 +24,14 @@ export default function App() {
             element={
               <React.Suspense fallback={<Fallback />}>
                 <Stopwatch />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path='keyboard'
+            element={
+              <React.Suspense fallback={<Fallback />}>
+                <Keyboard />
               </React.Suspense>
             }
           />

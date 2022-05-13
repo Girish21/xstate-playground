@@ -36,7 +36,7 @@ const Display = ({ service }: { service: InterpreterFrom<typeof machine> }) => {
   const timeElapsed = useSelector(service, state => state.context.duration)
 
   return (
-    <div className='font-mono bg-lime-400 p-6 rounded-lg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+    <div className='font-mono bg-lime-400 text-gray-900 dark:text-gray-900 p-6 rounded-lg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
       <div className='flex items-end'>
         <span className='text-2xl italic'>{getMinutes(timeElapsed)}</span>
         <span className='text-2xl italic'>:</span>
