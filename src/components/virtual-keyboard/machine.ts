@@ -4,11 +4,17 @@ const context = {
   key: '',
 }
 
+type TContext = typeof context
+type TEvents =
+  | { type: 'START' }
+  | { type: 'KEYDOWN'; key: string }
+  | { type: 'KEYUP' }
+
 export const machine = createMachine(
   {
     tsTypes: {} as import('./machine.typegen').Typegen0,
     id: 'keyboard',
-    schema: { context: {} as typeof context },
+    schema: { context: {} as TContext, events: {} as TEvents },
     context,
     initial: 'IDLE',
     states: {
@@ -50,8 +56,7 @@ export const machine = createMachine(
   },
   {
     actions: {
-      // @ts-ignore
-      keydown: assign({ key: (_, event) => event.key }),
+      keydown: assign({ key: (_, event) => event.key.toLowerCase() }),
       keyup: assign({ key: _ => '' }),
     },
   },
