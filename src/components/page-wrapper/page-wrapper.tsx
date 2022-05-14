@@ -6,7 +6,7 @@ export const PageWrapper: React.FC<{
   className?: string
 }> = ({ children, className }) => {
   return (
-    <div className={clsx('flex-1 pt-6 px-6 grid grid-cols-12', className)}>
+    <div className={clsx('grid flex-1 grid-cols-12', className)}>
       {children}
     </div>
   )

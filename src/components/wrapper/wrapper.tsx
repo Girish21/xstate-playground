@@ -1,10 +1,10 @@
 import { Outlet } from 'react-router-dom'
-import { Header } from '../header'
+import { AppNav } from '../app-nav'
 
 export function Wrapper() {
   return (
     <main className='flex flex-col'>
-      <Header />
+      <AppNav />
       <Outlet />
     </main>
   )
