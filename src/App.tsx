@@ -1,10 +1,13 @@
 import * as React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Wrapper, Fallback } from './components'
 
 const IndexPage = React.lazy(() => import('./Pages'))
 const Stopwatch = React.lazy(() => import('./Pages/stopwatch'))
 const Keyboard = React.lazy(() => import('./Pages/keyboard'))
+const VirtualKeyboard = React.lazy(
+  () => import('./Pages/keyboard/virtual-keyboard'),
+)
 
 export default function App() {
   return (
@@ -34,7 +37,17 @@ export default function App() {
                 <Keyboard />
               </React.Suspense>
             }
-          />
+          >
+            <Route
+              path='virtual-keyboard'
+              element={
+                <React.Suspense fallback={<Fallback />}>
+                  <VirtualKeyboard />
+                </React.Suspense>
+              }
+            />
+            <Route index element={<Navigate to='virtual-keyboard' replace />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
