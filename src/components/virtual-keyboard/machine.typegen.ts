@@ -5,6 +5,7 @@ export interface Typegen0 {
   eventsCausingActions: {
     keydown: 'KEYDOWN'
     keyup: 'KEYUP'
+    shift: 'SHIFT'
   }
   internalEvents: {
     '': { type: '' }
@@ -18,7 +19,9 @@ export interface Typegen0 {
     delays: never
   }
   eventsCausingServices: {}
-  eventsCausingGuards: {}
+  eventsCausingGuards: {
+    keyGuard: 'KEYDOWN' | 'KEYUP'
+  }
   eventsCausingDelays: {}
   matchesStates: 'IDLE' | 'START'
   tags: never

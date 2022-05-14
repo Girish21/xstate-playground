@@ -35,7 +35,7 @@ export function Key({ children, active }: Props & { active: boolean }) {
   return (
     <span
       className={clsx(
-        'relative isolate grid h-16 w-16 place-content-center rounded-xl uppercase  text-white transition duration-200 ease-out after:absolute after:left-1/2 after:top-1/2 after:z-0 after:h-10 after:w-10 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-lg after:bg-gradient-to-t after:content-[""]',
+        'relative isolate grid h-16 w-16 place-content-center rounded-xl text-white transition duration-200 ease-out after:absolute after:left-1/2 after:top-1/2 after:z-0 after:h-10 after:w-10 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-lg after:bg-gradient-to-t after:content-[""]',
         active
           ? 'scale-125 bg-green-400 after:from-emerald-500 after:to-emerald-600 dark:bg-green-700 dark:after:from-emerald-500 dark:after:to-emerald-600'
           : 'bg-slate-700 after:from-slate-500 after:to-slate-600',

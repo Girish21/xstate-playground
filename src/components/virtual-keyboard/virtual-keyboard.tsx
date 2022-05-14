@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { InterpreterFrom } from 'xstate'
 import { useInterpret, useSelector } from '@xstate/react'
 import * as Keyboard from '../keyboard'
@@ -10,9 +11,18 @@ function Key({
   children: string
   service: InterpreterFrom<typeof machine>
 }) {
-  const active = useSelector(service, state => state.context.key === children)
+  const shiftPressed = useSelector(service, state => state.context.shift)
+  const active = useSelector(service, state =>
+    state.context.keys.includes(
+      shiftPressed ? children.toUpperCase() : children,
+    ),
+  )
 
-  return <Keyboard.Key active={active}>{children}</Keyboard.Key>
+  return (
+    <Keyboard.Key active={active}>
+      {shiftPressed ? children.toUpperCase() : children}
+    </Keyboard.Key>
+  )
 }
 
 export function VirtualKeyboard() {
