@@ -6,6 +6,7 @@ export interface Typegen0 {
     keydown: 'KEYDOWN'
     keyup: 'KEYUP'
     shift: 'SHIFT'
+    caps: 'CAPS'
   }
   internalEvents: {
     '': { type: '' }

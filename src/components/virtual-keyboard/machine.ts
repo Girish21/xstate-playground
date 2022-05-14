@@ -1,9 +1,11 @@
 import { createMachine, assign } from 'xstate'
 
 const context = {
+  capsLock: false,
   keys: [] as string[],
-  shift: false,
   keyDown: false,
+  shift: false,
+  uppercase: false,
 }
 
 type TContext = typeof context
@@ -12,6 +14,7 @@ type TEvents =
   | { type: 'KEYDOWN'; key: string }
   | { type: 'KEYUP'; key: string }
   | { type: 'SHIFT'; pressed: boolean }
+  | { type: 'CAPS'; on: boolean }
 
 export const machine = createMachine(
   {
@@ -34,14 +37,20 @@ export const machine = createMachine(
           id: 'keyboard handler',
           src: _ => cb => {
             function keyDownHandler(e: KeyboardEvent) {
+              if (e.key === 'CapsLock' || e.getModifierState('CapsLock')) {
+                cb({ type: 'CAPS', on: true })
+              }
               if (e.key === 'Shift') {
-                cb({ type: 'SHIFT', pressed: e.shiftKey })
+                cb({ type: 'SHIFT', pressed: true })
               }
               cb({ type: 'KEYDOWN', key: e.key })
             }
             function keyUpHandler(e: KeyboardEvent) {
+              if (e.key === 'CapsLock') {
+                cb({ type: 'CAPS', on: false })
+              }
               if (e.key === 'Shift') {
-                cb({ type: 'SHIFT', pressed: e.shiftKey })
+                cb({ type: 'SHIFT', pressed: false })
               }
               cb({ type: 'KEYUP', key: e.key })
             }
@@ -67,6 +76,9 @@ export const machine = createMachine(
           SHIFT: {
             actions: ['shift'],
           },
+          CAPS: {
+            actions: ['caps'],
+          },
         },
       },
     },
@@ -79,21 +91,34 @@ export const machine = createMachine(
       }),
       keyup: assign({
         keys: (context, event) => {
-          const index = context.keys.findIndex(key => key === event.key)
-          return [
-            ...context.keys.slice(0, index),
-            ...context.keys.slice(index + 1),
-          ]
+          const keys = [...new Set(context.keys)]
+          const index = keys.findIndex(
+            key => (context.uppercase ? key : key.toLowerCase()) === event.key,
+          )
+          return [...keys.slice(0, index), ...keys.slice(index + 1)]
         },
         keyDown: _ => false,
       }),
-      shift: assign({ shift: (_, event) => event.pressed }),
+      shift: assign((context, event) => {
+        const shiftPressed = event.pressed
+        const capsLockOn = context.capsLock
+        return {
+          ...context,
+          shift: event.pressed,
+          uppercase: capsLockOn ? (shiftPressed ? false : true) : shiftPressed,
+        }
+      }),
+      caps: assign((context, event) => {
+        const nextState = event.on
+        return { ...context, uppercase: nextState, capsLock: nextState }
+      }),
     },
     guards: {
-      keyGuard: (context, event) =>
-        event.type === 'KEYDOWN' && context.keyDown === true
-          ? false
-          : event.key !== 'Shift' && event.key !== 'Enter' && event.key !== ' ',
+      keyGuard: (_, event) =>
+        event.key !== 'Shift' &&
+        event.key !== 'Enter' &&
+        event.key !== ' ' &&
+        event.key !== 'CapsLock',
     },
   },
 )

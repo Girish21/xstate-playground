@@ -11,7 +11,7 @@ function Key({
   children: string
   service: InterpreterFrom<typeof machine>
 }) {
-  const shiftPressed = useSelector(service, state => state.context.shift)
+  const shiftPressed = useSelector(service, state => state.context.uppercase)
   const active = useSelector(service, state =>
     state.context.keys.includes(
       shiftPressed ? children.toUpperCase() : children,
