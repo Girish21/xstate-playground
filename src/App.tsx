@@ -8,6 +8,7 @@ const Keyboard = React.lazy(() => import('./Pages/keyboard'))
 const VirtualKeyboard = React.lazy(
   () => import('./Pages/keyboard/virtual-keyboard'),
 )
+const TouchTyping = React.lazy(() => import('./Pages/keyboard/touch-typing'))
 
 export default function App() {
   return (
@@ -43,6 +44,14 @@ export default function App() {
               element={
                 <React.Suspense fallback={<Fallback />}>
                   <VirtualKeyboard />
+                </React.Suspense>
+              }
+            />
+            <Route
+              path='touch-typing'
+              element={
+                <React.Suspense fallback={<Fallback />}>
+                  <TouchTyping />
                 </React.Suspense>
               }
             />

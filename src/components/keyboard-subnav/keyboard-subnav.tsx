@@ -7,6 +7,7 @@ export function KeyboardSubnav() {
     <Header>
       <Nav>
         <NavLink to='virtual-keyboard'>Virtual Keyboard</NavLink>
+        <NavLink to='touch-typing'>Touch Typing</NavLink>
       </Nav>
     </Header>
   )
