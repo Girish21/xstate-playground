@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { useActor, useInterpret, useSelector } from '@xstate/react'
 import clsx from 'clsx'
 import { ActorRefFrom, InterpreterFrom } from 'xstate'
@@ -67,10 +68,18 @@ function Sentence({ service }: { service: InterpreterFrom<typeof machine> }) {
 }
 
 function Reset({ service }: { service: InterpreterFrom<typeof machine> }) {
+  const buttonRef = React.useRef<HTMLButtonElement>(null)
   const showRest = useSelector(service, state => state.matches('end'))
+
+  React.useEffect(() => {
+    if (showRest && buttonRef.current) {
+      buttonRef.current.focus()
+    }
+  }, [showRest])
 
   return (
     <button
+      ref={buttonRef}
       onClick={() => service.send('rest')}
       className={clsx(
         showRest ? 'visible' : 'invisible',
