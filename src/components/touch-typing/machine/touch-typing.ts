@@ -7,10 +7,12 @@ const context = {
     word: string
     ref: ActorRefFrom<typeof createWordMachine>
   }>,
+  length: 0,
   currentWordPosition: 0,
   startTime: 0,
   time: 0,
   wpm: 0,
+  errors: 0,
 }
 
 export const machine =
@@ -71,6 +73,9 @@ export const machine =
             TICK: {
               actions: ['tick', 'wpm'],
             },
+            ERROR: {
+              actions: ['error'],
+            },
           },
         },
         END: {
@@ -93,6 +98,7 @@ export const machine =
                 word,
                 ref: spawn(createWordMachine(word)),
               })),
+          length: context => context.sentence.length,
           currentWordPosition: _ => 0,
         }),
         notifyWord: context =>
@@ -112,6 +118,7 @@ export const machine =
             return Math.floor(context.currentWordPosition / minutes)
           },
         }),
+        error: assign({ errors: contex => contex.errors + 1 }),
       },
       guards: {
         hasNextWord: context =>
@@ -128,3 +135,4 @@ type TEvents =
   | { type: 'NOTIFY_NEXT_WORD' }
   | { type: 'RESET' }
   | { type: 'TICK' }
+  | { type: 'ERROR' }

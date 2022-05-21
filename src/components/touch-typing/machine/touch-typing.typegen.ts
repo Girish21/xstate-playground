@@ -8,6 +8,7 @@ export interface Typegen0 {
     notifyWord: 'NOTIFY_NEXT_WORD' | ''
     tick: 'TICK'
     wpm: 'TICK'
+    error: 'ERROR'
     initializeMachine: 'RESET'
   }
   internalEvents: {

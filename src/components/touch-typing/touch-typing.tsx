@@ -91,21 +91,73 @@ function Reset({ service }: { service: InterpreterFrom<typeof machine> }) {
   )
 }
 
-function Stats({ service }: { service: InterpreterFrom<typeof machine> }) {
+function PrimaryStatText({
+  children,
+  className,
+  ...rest
+}: { children: React.ReactNode } & React.HTMLAttributes<HTMLSpanElement>) {
+  return (
+    <span
+      className={clsx(
+        'font-mono text-4xl font-bold italic text-gray-800 dark:text-gray-100',
+        className,
+      )}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+function SecondaryStatText({
+  children,
+  className,
+  ...rest
+}: { children: React.ReactNode } & React.HTMLAttributes<HTMLSpanElement>) {
+  return (
+    <span
+      className={clsx(
+        'text-sm text-gray-600 opacity-80 dark:text-gray-200 dark:opacity-75',
+        className,
+      )}
+      {...rest}
+    >
+      {children}
+    </span>
+  )
+}
+
+function WPM({ service }: { service: InterpreterFrom<typeof machine> }) {
   const wpm = useSelector(service, state => state.context.wpm)
 
   return (
     <p className='select-none'>
-      <span className='font-mono text-4xl font-bold italic text-gray-800 dark:text-gray-100'>
-        {wpm}
-      </span>{' '}
-      <span
-        className='text-sm text-gray-600 opacity-80 dark:text-gray-200 dark:opacity-75'
-        title='Words Per Minute'
-      >
-        w.p.m
-      </span>
+      <PrimaryStatText>{isNaN(wpm) ? 0 : wpm}</PrimaryStatText>{' '}
+      <SecondaryStatText title='Words Per Minute'>w.p.m</SecondaryStatText>
     </p>
+  )
+}
+
+function Accuracy({ service }: { service: InterpreterFrom<typeof machine> }) {
+  const errors = useSelector(service, state => state.context.errors)
+  const length = useSelector(service, state => state.context.length)
+
+  return (
+    <p className='select-none'>
+      <PrimaryStatText>
+        {100 - Math.floor((errors / length) * 100)}%
+      </PrimaryStatText>
+      <SecondaryStatText className='ml-2'>Accuracy</SecondaryStatText>
+    </p>
+  )
+}
+
+function Stats({ service }: { service: InterpreterFrom<typeof machine> }) {
+  return (
+    <div className='flex items-center gap-8'>
+      <Accuracy service={service} />
+      <WPM service={service} />
+    </div>
   )
 }
 

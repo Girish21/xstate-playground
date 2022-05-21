@@ -9,6 +9,7 @@ export interface Typegen0 {
     keydown: 'KEYDOWN'
     notifyCharacterActorEnter: 'KEYDOWN' | 'ENTER'
     checkDone: 'KEYDOWN'
+    error: 'ERROR'
     initializeMachine: 'xstate.init'
     nextWord: 'CHECK_DONE'
   }

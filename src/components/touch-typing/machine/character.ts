@@ -1,4 +1,5 @@
 import { assign, createMachine } from 'xstate'
+import { sendParent } from 'xstate/lib/actions'
 
 const context = {
   character: '',
@@ -39,7 +40,9 @@ export const createCharacterMachine = (character: string) =>
           },
         },
         DONE: {},
-        ERROR: {},
+        ERROR: {
+          entry: sendParent({ type: 'ERROR' }),
+        },
       },
     },
     {

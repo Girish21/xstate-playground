@@ -65,6 +65,9 @@ export const createWordMachine = (word: string) =>
               cond: 'isDone',
               target: 'DONE',
             },
+            ERROR: {
+              actions: 'error',
+            },
           },
         },
         DONE: {
@@ -104,6 +107,7 @@ export const createWordMachine = (word: string) =>
         nextWord: sendParent(_ => ({ type: 'NEXT_WORD' })),
         checkDone: send({ type: 'CHECK_DONE' }),
         startTimer: sendParent(_ => ({ type: 'KEYDOWN' })),
+        error: sendParent({ type: 'ERROR' }),
       },
       guards: {
         isDone: context => context.currentPosition === context.length,
@@ -126,3 +130,4 @@ type TEvent =
   | { type: 'ENTER' }
   | { type: 'DONE' }
   | { type: 'CHECK_DONE' }
+  | { type: 'ERROR' }
