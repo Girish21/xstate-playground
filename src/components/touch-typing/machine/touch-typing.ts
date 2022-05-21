@@ -1,17 +1,17 @@
 import { ActorRefFrom, assign, createMachine, send, spawn } from 'xstate'
-import { characterMachine } from './character'
+import { createWordMachine } from './word'
 
 const context = {
   sentence: '',
-  characters: [] as Array<{
-    character: string
-    ref: ActorRefFrom<typeof characterMachine>
+  words: [] as Array<{
+    word: string
+    ref: ActorRefFrom<typeof createWordMachine>
   }>,
-  currentPosition: 0,
+  currentWordPosition: 0,
 }
 
 export const machine =
-  /** @xstate-layout N4IgpgJg5mDOIC5QBcD2BXAxgCwLTIE8AHASwDsoA6AG1QEMJyoBiRUI1WE5E1MtkAA9EAJgAcYygAYAjAFYAbDIDsAZgCc6mavkAWADQgCoqVMq7N6sTPXLdE2wF9HhtFjyFSFSgCcwDAmYAazACCFQAd34kEA4uHj4BYQRlWUplBUVxEXVVCRlDYwR1M0srGQsRGQlM5xcQMlQIOAE3HHxiJhp6RgoBOO5eaNBk3RFCxBkFSTKxJRLVOTsxZ1cMds8uvwD+zkHEmOS89UpVXVU7ZSWxDLFVCYR5UssxESrlXJKRVZA2j07vGAyBBdvEhklEOoFAppAoRHIZFI5It1Es5A8bLpzJY7CUpqoRMofn8Ol4oKD9sMhJMxBjlJQyh9UlJdNUbgo6o4gA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QBcD2BXAxgCwLTIE8AHASwDsoA6AG1QEMJyoBiRUI1WE5E1MtkAA9EAJhEBOSiICsARmnSAbAGZxigCwAOdcs0AaEAVEAGdZWnjlykbMXT1sgOzLH6gL5uDaLHkKkKlHSYPABuYMxkYILIAOqoAE4QAhxcPHwCwghWxpTqOiLWygqa4rKmBkYIjppSisb14o52ijIeXhg4+MRMgcEkYRGoPABmBAByUbEJSUggKdy8-LOZKo6UxoqyWsb2jpbG+oaIyoo1WiJN9eoX0k0eniBkqBBwAt6dfj20DEzJnAvpZaIa4VRCyTSKdaWKzyORNRQtNogd6+boBIKhMB-VKLDLHZQ5W5qLTqUzSA6ghCycSSGQ08SaGzaKwiTRIlFdfxUMBkGbsf5pJagTJyMyyAnOZymU6OaSUpmUWQSGlWIotYzVdkdVFc7EAoVCMGHSrSWr1FyaA6WrRqe5uIA */
   createMachine(
     {
       context: context,
@@ -24,81 +24,68 @@ export const machine =
         loading: {
           entry: 'initializeMachine',
           always: {
-            target: 'ready',
+            target: 'active',
           },
         },
-        ready: {
-          entry: 'notifyCharacterActorEnter',
-          invoke: {
-            id: 'key handler',
-            src: _ => cb => {
-              function keydownHandler(e: KeyboardEvent) {
-                if (/^[A-Za-z0-9 .,;:'"]$/.test(e.key)) {
-                  cb({ type: 'keydown', key: e.key })
-                }
-              }
-
-              window.addEventListener('keydown', keydownHandler)
-
-              return () => {
-                window.removeEventListener('keydown', keydownHandler)
-              }
-            },
-          },
+        active: {
+          entry: 'notifyWord',
           on: {
-            keydown: [
+            nextWord: {
+              actions: ['nextWord', 'notifyNextWord'],
+            },
+            notifyNextWord: [
               {
-                cond: 'endReached',
+                cond: 'hasNextWord',
                 target: 'end',
               },
               {
-                actions: [
-                  'notifyCharacterActorExit',
-                  'keydown',
-                  'notifyCharacterActorEnter',
-                ],
+                actions: 'notifyWord',
               },
             ],
           },
         },
-        end: {},
+        end: {
+          on: {
+            rest: {
+              target: 'loading',
+            },
+          },
+        },
       },
     },
     {
       actions: {
-        keydown: assign({
-          currentPosition: context => context.currentPosition + 1,
-        }),
-        notifyCharacterActorExit: (context, event) => {
-          if (context.currentPosition < context.characters.length) {
-            context.characters[context.currentPosition].ref.send({
-              type: 'exit',
-              key: event.key,
-            })
-          }
-        },
-        notifyCharacterActorEnter: (context, event) => {
-          if (context.currentPosition < context.characters.length) {
-            context.characters[context.currentPosition].ref.send({
-              type: 'enter',
-            })
-          }
-        },
         initializeMachine: assign({
-          characters: context =>
-            context.sentence.split('').map(character => ({
-              character,
-              ref: spawn(characterMachine(character)),
-            })),
+          words: context =>
+            context.sentence
+              .split(/([\w.,;'"]+ ?)/)
+              .filter(Boolean)
+              .map(word => ({
+                word,
+                ref: spawn(createWordMachine(word)),
+              })),
+          currentWordPosition: _ => 0,
         }),
+        notifyWord: context =>
+          context.words[context.currentWordPosition].ref.send({
+            type: 'enter',
+          }),
+        nextWord: assign({
+          currentWordPosition: context => context.currentWordPosition + 1,
+        }),
+        notifyNextWord: send({ type: 'notifyNextWord' }),
       },
       guards: {
-        endReached: context =>
-          context.currentPosition === context.characters.length,
+        hasNextWord: context =>
+          context.currentWordPosition === context.words.length,
       },
     },
   )
 
 type TContext = typeof context
 
-type TEvents = { type: 'keydown'; key: string }
+type TEvents =
+  | { type: 'keydown'; key: string }
+  | { type: 'nextWord' }
+  | { type: 'notifyNextWord' }
+  | { type: 'rest' }

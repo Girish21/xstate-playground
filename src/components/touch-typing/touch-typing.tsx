@@ -1,13 +1,13 @@
 import { useActor, useInterpret, useSelector } from '@xstate/react'
 import clsx from 'clsx'
 import { ActorRefFrom, InterpreterFrom } from 'xstate'
-import { characterMachine, machine } from './machine'
+import { createCharacterMachine, createWordMachine, machine } from './machine'
 
 function Character({
   actorRef,
   children,
 }: {
-  actorRef: ActorRefFrom<typeof characterMachine>
+  actorRef: ActorRefFrom<typeof createCharacterMachine>
   children: string
   index: number
 }) {
@@ -30,19 +30,55 @@ function Character({
   )
 }
 
-function Characters({ service }: { service: InterpreterFrom<typeof machine> }) {
+function Word({
+  service,
+}: {
+  service: ActorRefFrom<typeof createWordMachine>
+}) {
   const characters = useSelector(service, state => state.context.characters)
+  const active = useSelector(service, state => state.matches('active'))
 
   return (
-    <div>
-      <div className='flex flex-wrap justify-center'>
-        {characters.map(({ character, ref }, index) => (
-          <Character key={index} actorRef={ref} index={index}>
-            {character}
-          </Character>
-        ))}
-      </div>
+    <div
+      className={clsx(
+        `relative flex justify-center border-t-2 border-transparent`,
+        active && 'rounded-md border-slate-600 dark:border-zinc-300',
+      )}
+    >
+      {characters.map(({ character, ref }, index) => (
+        <Character key={index} actorRef={ref} index={index}>
+          {character}
+        </Character>
+      ))}
     </div>
+  )
+}
+
+function Sentence({ service }: { service: InterpreterFrom<typeof machine> }) {
+  const words = useSelector(service, state => state.context.words)
+
+  return (
+    <div className='flex flex-wrap gap-1'>
+      {words.map(({ word, ref }) => (
+        <Word key={word} service={ref} />
+      ))}
+    </div>
+  )
+}
+
+function Reset({ service }: { service: InterpreterFrom<typeof machine> }) {
+  const showRest = useSelector(service, state => state.matches('end'))
+
+  return (
+    <button
+      onClick={() => service.send('rest')}
+      className={clsx(
+        showRest ? 'visible' : 'invisible',
+        'rounded bg-gray-200 px-4 py-1 shadow-md transition duration-150 ease-out hover:scale-110 active:scale-95 active:shadow-none dark:bg-slate-700 dark:shadow-black',
+      )}
+    >
+      Rest
+    </button>
   )
 }
 
@@ -53,5 +89,10 @@ export function TouchTyping() {
     },
   })
 
-  return <Characters service={service} />
+  return (
+    <div className='flex flex-col items-center justify-center gap-4'>
+      <Sentence service={service} />
+      <Reset service={service} />
+    </div>
+  )
 }

@@ -3,10 +3,10 @@
 export interface Typegen0 {
   '@@xstate/typegen': true
   eventsCausingActions: {
-    notifyCharacterActorExit: 'keydown'
-    keydown: 'keydown'
-    notifyCharacterActorEnter: 'keydown' | ''
-    initializeMachine: 'xstate.init'
+    nextWord: 'nextWord'
+    notifyNextWord: 'nextWord'
+    notifyWord: 'notifyNextWord' | ''
+    initializeMachine: 'rest'
   }
   internalEvents: {
     '': { type: '' }
@@ -21,9 +21,9 @@ export interface Typegen0 {
   }
   eventsCausingServices: {}
   eventsCausingGuards: {
-    endReached: 'keydown'
+    hasNextWord: 'notifyNextWord'
   }
   eventsCausingDelays: {}
-  matchesStates: 'loading' | 'ready' | 'end'
+  matchesStates: 'loading' | 'active' | 'end'
   tags: never
 }
