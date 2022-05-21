@@ -54,6 +54,7 @@ export const createWordMachine = (word: string) =>
           on: {
             keydown: {
               actions: [
+                'startTimer',
                 'notifyCharacterActorExit',
                 'keydown',
                 'notifyCharacterActorEnter',
@@ -102,6 +103,7 @@ export const createWordMachine = (word: string) =>
         }),
         nextWord: sendParent(_ => ({ type: 'nextWord' })),
         checkDone: send({ type: 'checkDone' }),
+        startTimer: sendParent(_ => ({ type: 'keydown' })),
       },
       guards: {
         isDone: context => context.currentPosition === context.length,

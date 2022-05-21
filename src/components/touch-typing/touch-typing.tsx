@@ -59,7 +59,7 @@ function Sentence({ service }: { service: InterpreterFrom<typeof machine> }) {
   const words = useSelector(service, state => state.context.words)
 
   return (
-    <div className='flex flex-wrap gap-1'>
+    <div className='flex max-w-[75ch] flex-wrap gap-1'>
       {words.map(({ word, ref }) => (
         <Word key={word} service={ref} />
       ))}
@@ -91,6 +91,21 @@ function Reset({ service }: { service: InterpreterFrom<typeof machine> }) {
   )
 }
 
+function Stats({ service }: { service: InterpreterFrom<typeof machine> }) {
+  const wpm = useSelector(service, state => state.context.wpm)
+
+  return (
+    <p className='select-none'>
+      <span className='font-mono text-2xl font-bold italic text-gray-800 dark:text-gray-100'>
+        {wpm}
+      </span>{' '}
+      <span className='text-sm text-gray-600 opacity-80 dark:text-gray-200 dark:opacity-75'>
+        w.p.m
+      </span>
+    </p>
+  )
+}
+
 export function TouchTyping() {
   const service = useInterpret(machine, {
     context: {
@@ -101,6 +116,7 @@ export function TouchTyping() {
   return (
     <div className='flex flex-col items-center justify-center gap-4'>
       <Sentence service={service} />
+      <Stats service={service} />
       <Reset service={service} />
     </div>
   )

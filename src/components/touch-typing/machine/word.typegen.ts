@@ -4,6 +4,7 @@ export interface Typegen0 {
   '@@xstate/typegen': true
   eventsCausingActions: {
     restCurrentPosition: 'enter'
+    startTimer: 'keydown'
     notifyCharacterActorExit: 'keydown'
     keydown: 'keydown'
     notifyCharacterActorEnter: 'keydown' | 'enter'

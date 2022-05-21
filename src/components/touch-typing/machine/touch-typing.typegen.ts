@@ -6,6 +6,8 @@ export interface Typegen0 {
     nextWord: 'nextWord'
     notifyNextWord: 'nextWord'
     notifyWord: 'notifyNextWord' | ''
+    tick: 'tick'
+    wpm: 'tick'
     initializeMachine: 'rest'
   }
   internalEvents: {
@@ -24,6 +26,6 @@ export interface Typegen0 {
     hasNextWord: 'notifyNextWord'
   }
   eventsCausingDelays: {}
-  matchesStates: 'loading' | 'active' | 'end'
+  matchesStates: 'loading' | 'pending' | 'active' | 'end'
   tags: never
 }
