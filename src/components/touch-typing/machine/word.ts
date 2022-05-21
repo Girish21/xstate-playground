@@ -22,24 +22,24 @@ export const createWordMachine = (word: string) =>
       schema: { context: {} as TContext, events: {} as TEvent },
       preserveActionOrder: true,
       id: `words-${Math.random().toString(32).substring(5)}-${word}`,
-      initial: 'idle',
+      initial: 'IDLE',
       states: {
-        idle: {
+        IDLE: {
           entry: 'initializeMachine',
           on: {
-            enter: {
+            ENTER: {
               actions: 'restCurrentPosition',
-              target: 'active',
+              target: 'ACTIVE',
             },
           },
         },
-        active: {
+        ACTIVE: {
           entry: 'notifyCharacterActorEnter',
           invoke: {
             src: _ => cb => {
               function keydownHandler(e: KeyboardEvent) {
                 if (/^[A-Za-z0-9 .,;:'"]$/.test(e.key)) {
-                  cb({ type: 'keydown', key: e.key })
+                  cb({ type: 'KEYDOWN', key: e.key })
                 }
               }
 
@@ -52,7 +52,7 @@ export const createWordMachine = (word: string) =>
             id: 'key handler',
           },
           on: {
-            keydown: {
+            KEYDOWN: {
               actions: [
                 'startTimer',
                 'notifyCharacterActorExit',
@@ -61,13 +61,13 @@ export const createWordMachine = (word: string) =>
                 'checkDone',
               ],
             },
-            checkDone: {
+            CHECK_DONE: {
               cond: 'isDone',
-              target: 'done',
+              target: 'DONE',
             },
           },
         },
-        done: {
+        DONE: {
           entry: 'nextWord',
         },
       },
@@ -86,7 +86,7 @@ export const createWordMachine = (word: string) =>
         notifyCharacterActorExit: (context, event) => {
           if (context.currentPosition < context.length) {
             context.characters[context.currentPosition].ref.send({
-              type: 'exit',
+              type: 'EXIT',
               key: event.key,
             })
           }
@@ -94,16 +94,16 @@ export const createWordMachine = (word: string) =>
         notifyCharacterActorEnter: context => {
           if (context.currentPosition < context.length) {
             context.characters[context.currentPosition].ref.send({
-              type: 'enter',
+              type: 'ENTER',
             })
           }
         },
         keydown: assign({
           currentPosition: context => context.currentPosition + 1,
         }),
-        nextWord: sendParent(_ => ({ type: 'nextWord' })),
-        checkDone: send({ type: 'checkDone' }),
-        startTimer: sendParent(_ => ({ type: 'keydown' })),
+        nextWord: sendParent(_ => ({ type: 'NEXT_WORD' })),
+        checkDone: send({ type: 'CHECK_DONE' }),
+        startTimer: sendParent(_ => ({ type: 'KEYDOWN' })),
       },
       guards: {
         isDone: context => context.currentPosition === context.length,
@@ -122,7 +122,7 @@ type TContext = {
 }
 
 type TEvent =
-  | { type: 'keydown'; key: string }
-  | { type: 'enter' }
-  | { type: 'done' }
-  | { type: 'checkDone' }
+  | { type: 'KEYDOWN'; key: string }
+  | { type: 'ENTER' }
+  | { type: 'DONE' }
+  | { type: 'CHECK_DONE' }

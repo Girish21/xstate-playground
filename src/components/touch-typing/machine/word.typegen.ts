@@ -3,14 +3,14 @@
 export interface Typegen0 {
   '@@xstate/typegen': true
   eventsCausingActions: {
-    restCurrentPosition: 'enter'
-    startTimer: 'keydown'
-    notifyCharacterActorExit: 'keydown'
-    keydown: 'keydown'
-    notifyCharacterActorEnter: 'keydown' | 'enter'
-    checkDone: 'keydown'
+    restCurrentPosition: 'ENTER'
+    startTimer: 'KEYDOWN'
+    notifyCharacterActorExit: 'KEYDOWN'
+    keydown: 'KEYDOWN'
+    notifyCharacterActorEnter: 'KEYDOWN' | 'ENTER'
+    checkDone: 'KEYDOWN'
     initializeMachine: 'xstate.init'
-    nextWord: 'checkDone'
+    nextWord: 'CHECK_DONE'
   }
   internalEvents: {
     'xstate.init': { type: 'xstate.init' }
@@ -24,9 +24,9 @@ export interface Typegen0 {
   }
   eventsCausingServices: {}
   eventsCausingGuards: {
-    isDone: 'checkDone'
+    isDone: 'CHECK_DONE'
   }
   eventsCausingDelays: {}
-  matchesStates: 'idle' | 'active' | 'done'
+  matchesStates: 'IDLE' | 'ACTIVE' | 'DONE'
   tags: never
 }

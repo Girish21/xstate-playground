@@ -3,12 +3,12 @@
 export interface Typegen0 {
   '@@xstate/typegen': true
   eventsCausingActions: {
-    nextWord: 'nextWord'
-    notifyNextWord: 'nextWord'
-    notifyWord: 'notifyNextWord' | ''
-    tick: 'tick'
-    wpm: 'tick'
-    initializeMachine: 'rest'
+    nextWord: 'NEXT_WORD'
+    notifyNextWord: 'NEXT_WORD'
+    notifyWord: 'NOTIFY_NEXT_WORD' | ''
+    tick: 'TICK'
+    wpm: 'TICK'
+    initializeMachine: 'RESET'
   }
   internalEvents: {
     '': { type: '' }
@@ -23,9 +23,9 @@ export interface Typegen0 {
   }
   eventsCausingServices: {}
   eventsCausingGuards: {
-    hasNextWord: 'notifyNextWord'
+    hasNextWord: 'NOTIFY_NEXT_WORD'
   }
   eventsCausingDelays: {}
-  matchesStates: 'loading' | 'pending' | 'active' | 'end'
+  matchesStates: 'LOADING' | 'PENDING' | 'ACTIVE' | 'END'
   tags: never
 }

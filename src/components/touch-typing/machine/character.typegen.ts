@@ -3,7 +3,7 @@
 export interface Typegen0 {
   '@@xstate/typegen': true
   eventsCausingActions: {
-    active: 'enter'
+    active: 'ENTER'
     inactive: 'xstate.init'
   }
   internalEvents: {
@@ -18,10 +18,10 @@ export interface Typegen0 {
   }
   eventsCausingServices: {}
   eventsCausingGuards: {
-    correct: 'exit'
-    incorrect: 'exit'
+    correct: 'EXIT'
+    incorrect: 'EXIT'
   }
   eventsCausingDelays: {}
-  matchesStates: 'idle' | 'active' | 'done' | 'error'
+  matchesStates: 'idle' | 'ACTIVE' | 'DONE' | 'ERROR'
   tags: never
 }

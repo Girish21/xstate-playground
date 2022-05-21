@@ -18,28 +18,28 @@ export const createCharacterMachine = (character: string) =>
         idle: {
           entry: 'inactive',
           on: {
-            enter: {
+            ENTER: {
               actions: 'active',
-              target: 'active',
+              target: 'ACTIVE',
             },
           },
         },
-        active: {
+        ACTIVE: {
           on: {
-            exit: [
+            EXIT: [
               {
                 cond: 'correct',
-                target: 'done',
+                target: 'DONE',
               },
               {
                 cond: 'incorrect',
-                target: 'error',
+                target: 'ERROR',
               },
             ],
           },
         },
-        done: {},
-        error: {},
+        DONE: {},
+        ERROR: {},
       },
     },
     {
@@ -56,4 +56,4 @@ export const createCharacterMachine = (character: string) =>
 
 type TContext = typeof context
 
-type TEvents = { type: 'enter' } | { type: 'exit'; key: string }
+type TEvents = { type: 'ENTER' } | { type: 'EXIT'; key: string }

@@ -22,30 +22,30 @@ export const machine =
       schema: { context: {} as TContext, events: {} as TEvents },
       preserveActionOrder: true,
       id: 'touch-typing',
-      initial: 'loading',
+      initial: 'LOADING',
       states: {
-        loading: {
+        LOADING: {
           entry: 'initializeMachine',
           always: {
-            target: 'pending',
+            target: 'PENDING',
           },
         },
-        pending: {
+        PENDING: {
           entry: 'notifyWord',
           on: {
-            keydown: {
-              target: 'active',
+            KEYDOWN: {
+              target: 'ACTIVE',
             },
           },
         },
-        active: {
+        ACTIVE: {
           entry: assign({ startTime: _ => Date.now() }),
           invoke: {
             id: 'timer',
             src: _ => cb => {
               let frameId: number
               function tick() {
-                cb({ type: 'tick' })
+                cb({ type: 'TICK' })
                 frameId = requestAnimationFrame(tick)
               }
               tick()
@@ -56,27 +56,27 @@ export const machine =
             },
           },
           on: {
-            nextWord: {
+            NEXT_WORD: {
               actions: ['nextWord', 'notifyNextWord'],
             },
-            notifyNextWord: [
+            NOTIFY_NEXT_WORD: [
               {
                 cond: 'hasNextWord',
-                target: 'end',
+                target: 'END',
               },
               {
                 actions: 'notifyWord',
               },
             ],
-            tick: {
+            TICK: {
               actions: ['tick', 'wpm'],
             },
           },
         },
-        end: {
+        END: {
           on: {
-            rest: {
-              target: 'loading',
+            RESET: {
+              target: 'LOADING',
             },
           },
         },
@@ -97,12 +97,12 @@ export const machine =
         }),
         notifyWord: context =>
           context.words[context.currentWordPosition].ref.send({
-            type: 'enter',
+            type: 'ENTER',
           }),
         nextWord: assign({
           currentWordPosition: context => context.currentWordPosition + 1,
         }),
-        notifyNextWord: send({ type: 'notifyNextWord' }),
+        notifyNextWord: send({ type: 'NOTIFY_NEXT_WORD' }),
         tick: assign({
           time: context => Date.now() - context.startTime,
         }),
@@ -123,8 +123,8 @@ export const machine =
 type TContext = typeof context
 
 type TEvents =
-  | { type: 'keydown'; key: string }
-  | { type: 'nextWord' }
-  | { type: 'notifyNextWord' }
-  | { type: 'rest' }
-  | { type: 'tick' }
+  | { type: 'KEYDOWN'; key: string }
+  | { type: 'NEXT_WORD' }
+  | { type: 'NOTIFY_NEXT_WORD' }
+  | { type: 'RESET' }
+  | { type: 'TICK' }

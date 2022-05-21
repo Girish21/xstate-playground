@@ -17,10 +17,10 @@ function Character({
   return (
     <span
       className={clsx(
-        state.matches('active')
+        state.matches('ACTIVE')
           ? 'before:bg-blue-400 before:bg-opacity-10 after:bg-violet-500 dark:before:bg-blue-300 dark:before:bg-opacity-10 dark:after:bg-violet-800'
           : '',
-        state.matches('error')
+        state.matches('ERROR')
           ? 'text-rose-900 before:bg-red-600 before:bg-opacity-10 after:bg-red-900 dark:text-rose-500 dark:before:bg-red-500 dark:before:bg-opacity-10 dark:after:bg-red-700'
           : '',
         'relative select-none whitespace-pre px-2 pt-2 pb-1 font-mono text-lg before:absolute before:inset-0 before:content-[""] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-1 after:content-[""]',
@@ -37,7 +37,7 @@ function Word({
   service: ActorRefFrom<typeof createWordMachine>
 }) {
   const characters = useSelector(service, state => state.context.characters)
-  const active = useSelector(service, state => state.matches('active'))
+  const active = useSelector(service, state => state.matches('ACTIVE'))
 
   return (
     <div
@@ -69,7 +69,7 @@ function Sentence({ service }: { service: InterpreterFrom<typeof machine> }) {
 
 function Reset({ service }: { service: InterpreterFrom<typeof machine> }) {
   const buttonRef = React.useRef<HTMLButtonElement>(null)
-  const showRest = useSelector(service, state => state.matches('end'))
+  const showRest = useSelector(service, state => state.matches('END'))
 
   React.useEffect(() => {
     if (showRest && buttonRef.current) {
@@ -80,7 +80,7 @@ function Reset({ service }: { service: InterpreterFrom<typeof machine> }) {
   return (
     <button
       ref={buttonRef}
-      onClick={() => service.send('rest')}
+      onClick={() => service.send('RESET')}
       className={clsx(
         showRest ? 'visible' : 'invisible',
         'rounded bg-gray-200 px-4 py-1 shadow-md transition duration-150 ease-out hover:scale-110 active:scale-95 active:shadow-none dark:bg-slate-700 dark:shadow-black',
