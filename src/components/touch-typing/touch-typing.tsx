@@ -96,10 +96,13 @@ function Stats({ service }: { service: InterpreterFrom<typeof machine> }) {
 
   return (
     <p className='select-none'>
-      <span className='font-mono text-2xl font-bold italic text-gray-800 dark:text-gray-100'>
+      <span className='font-mono text-4xl font-bold italic text-gray-800 dark:text-gray-100'>
         {wpm}
       </span>{' '}
-      <span className='text-sm text-gray-600 opacity-80 dark:text-gray-200 dark:opacity-75'>
+      <span
+        className='text-sm text-gray-600 opacity-80 dark:text-gray-200 dark:opacity-75'
+        title='Words Per Minute'
+      >
         w.p.m
       </span>
     </p>
