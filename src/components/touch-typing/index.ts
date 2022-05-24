@@ -1,1 +1,1 @@
-export * from './touch-typing'
+export { default } from './touch-typing'

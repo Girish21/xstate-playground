@@ -1,1 +1,1 @@
-export * from './stopwatch'
+export { default } from './stopwatch'

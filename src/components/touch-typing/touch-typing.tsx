@@ -161,7 +161,7 @@ function Stats({ service }: { service: InterpreterFrom<typeof machine> }) {
   )
 }
 
-export function TouchTyping() {
+export default function TouchTyping() {
   const service = useInterpret(machine, {
     context: {
       sentence: 'Moderate test sentence for calculating words per minute.',

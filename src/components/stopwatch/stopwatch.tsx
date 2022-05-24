@@ -36,7 +36,7 @@ const Display = ({ service }: { service: InterpreterFrom<typeof machine> }) => {
   const timeElapsed = useSelector(service, state => state.context.duration)
 
   return (
-    <div className='font-mono bg-lime-400 text-gray-900 dark:text-gray-900 p-6 rounded-lg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+    <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-lime-400 p-6 font-mono text-gray-900 dark:text-gray-900'>
       <div className='flex items-end'>
         <span className='text-2xl italic'>{getMinutes(timeElapsed)}</span>
         <span className='text-2xl italic'>:</span>
@@ -69,7 +69,7 @@ const Button: React.FC<
       ref={ref}
       className={clsx(
         className,
-        'text-neutral-900 text-xs origin-[50%_115px] absolute top-0 left-1/2 -translate-x-1/2 isolate z-20 after:content-[""] after:w-4 after:h-5 after:bg-gray-400 after:absolute after:-top-4 after:left-1/2 after:-translate-x-1/2 after:z-[-1] before:content-[""] before:rounded before:w-8 before:h-5 before:bg-gray-300 before:absolute before:-top-8 before:left-1/2 before:-translate-x-1/2',
+        'absolute top-0 left-1/2 isolate z-20 origin-[50%_115px] -translate-x-1/2 text-xs text-neutral-900 before:absolute before:-top-8 before:left-1/2 before:h-5 before:w-8 before:-translate-x-1/2 before:rounded before:bg-gray-300 before:content-[""] after:absolute after:-top-4 after:left-1/2 after:z-[-1] after:h-5 after:w-4 after:-translate-x-1/2 after:bg-gray-400 after:content-[""]',
       )}
       onClick={clickHandler}
       {...rest}
@@ -128,12 +128,12 @@ const Actions = ({ service }: { service: InterpreterFrom<typeof machine> }) => {
   )
 }
 
-export function Stopwatch() {
+export default function Stopwatch() {
   const service = useInterpret(machine)
 
   return (
     <section>
-      <div className='w-64 h-64 rounded-[100%] bg-neutral-900 relative isolate after:content-[""] after:absolute after:inset-0 z-10 after:bg-transparent after:border-[24px] after:border-gray-400 after:rounded-[100%]'>
+      <div className='relative isolate z-10 h-64 w-64 rounded-[100%] bg-neutral-900 after:absolute after:inset-0 after:rounded-[100%] after:border-[24px] after:border-gray-400 after:bg-transparent after:content-[""]'>
         <Display service={service} />
         <Actions service={service} />
       </div>

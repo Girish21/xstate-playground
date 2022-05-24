@@ -2,7 +2,7 @@ import { Header } from '../header'
 import { Nav } from '../nav'
 import { NavLink } from '../nav-link'
 
-export function KeyboardSubnav() {
+export default function KeyboardSubnav() {
   return (
     <Header>
       <Nav>

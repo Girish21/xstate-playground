@@ -1,1 +1,1 @@
-export * from './keyboard-subnav'
+export { default } from './keyboard-subnav'

@@ -25,7 +25,7 @@ function Key({
   )
 }
 
-export function VirtualKeyboard() {
+export default function VirtualKeyboard() {
   const service = useInterpret(machine)
 
   return (
