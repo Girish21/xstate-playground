@@ -9,6 +9,7 @@ const VirtualKeyboard = React.lazy(
   () => import('./Pages/keyboard/virtual-keyboard'),
 )
 const TouchTyping = React.lazy(() => import('./Pages/keyboard/touch-typing'))
+const Notifications = React.lazy(() => import('./Pages/notifications'))
 
 export default function App() {
   return (
@@ -28,6 +29,14 @@ export default function App() {
             element={
               <React.Suspense fallback={<Fallback />}>
                 <Stopwatch />
+              </React.Suspense>
+            }
+          />
+          <Route
+            path='notifications'
+            element={
+              <React.Suspense fallback={<Fallback />}>
+                <Notifications />
               </React.Suspense>
             }
           />

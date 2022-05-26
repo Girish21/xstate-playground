@@ -9,6 +9,7 @@ export function AppNav() {
         <NavLink to='/'>Home</NavLink>
         <NavLink to='/stopwatch'>Stopwatch</NavLink>
         <NavLink to='/keyboard'>Keyboard</NavLink>
+        <NavLink to='/notifications'>Notifications</NavLink>
       </Nav>
     </Header>
   )
