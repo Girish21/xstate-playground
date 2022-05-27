@@ -1,8 +1,8 @@
-import close from '../../assets/close.svg'
 import { useActor, useInterpret, useSelector } from '@xstate/react'
 import clsx from 'clsx'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ActorRefFrom } from 'xstate'
+import close from '../../assets/close.svg'
 import { machine, NotificationMachine, NotificationsMachine } from './machines'
 import { NotificationType } from './machines/notification.machine'
 
