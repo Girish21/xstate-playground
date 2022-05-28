@@ -10,6 +10,7 @@ const VirtualKeyboard = React.lazy(
 )
 const TouchTyping = React.lazy(() => import('./Pages/keyboard/touch-typing'))
 const Notifications = React.lazy(() => import('./Pages/notifications'))
+const TicTacToe = React.lazy(() => import('./Pages/tic-tac-toe'))
 
 export default function App() {
   return (
@@ -66,6 +67,14 @@ export default function App() {
             />
             <Route index element={<Navigate to='virtual-keyboard' replace />} />
           </Route>
+          <Route
+            path='tic-tac-toe'
+            element={
+              <React.Suspense fallback={<Fallback />}>
+                <TicTacToe />
+              </React.Suspense>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>
