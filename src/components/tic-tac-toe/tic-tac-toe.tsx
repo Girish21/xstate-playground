@@ -1,9 +1,9 @@
-import * as React from 'react'
 import { useInterpret, useSelector } from '@xstate/react'
 import clsx from 'clsx'
+import { AnimatePresence, motion } from 'framer-motion'
+import * as React from 'react'
 import { ActorRefFrom, InterpreterFrom } from 'xstate'
 import { ButtonMachine, GameMachine, machine } from './machine'
-import { AnimatePresence, motion } from 'framer-motion'
 
 function ButtonImpl({ buttonRef }: { buttonRef: ActorRefFrom<ButtonMachine> }) {
   const selected = useSelector(buttonRef, state => state.context.selected)
