@@ -12,7 +12,7 @@ function ButtonImpl({ buttonRef }: { buttonRef: ActorRefFrom<ButtonMachine> }) {
   return (
     <button
       className={clsx(
-        'h-20 w-20 overflow-hidden rounded bg-green-600 text-5xl font-bold',
+        'h-20 w-20 overflow-hidden rounded bg-green-400 text-5xl font-bold text-gray-700 dark:bg-green-600 dark:text-white',
       )}
       disabled={inExitState}
       onClick={() => {
@@ -39,7 +39,7 @@ function Buttons({ service }: { service: InterpreterFrom<GameMachine> }) {
   const buttons = useSelector(service, state => state.context.buttons)
 
   return (
-    <div className='grid grid-cols-3 gap-4 rounded bg-green-900'>
+    <div className='grid grid-cols-3 gap-4 rounded bg-green-600 dark:bg-green-900'>
       {buttons.map(({ id, ref }) => (
         <Button key={id} buttonRef={ref} />
       ))}
@@ -87,7 +87,7 @@ function Message({ service }: { service: InterpreterFrom<GameMachine> }) {
 
 function GameMessage({ service }: { service: InterpreterFrom<GameMachine> }) {
   return (
-    <h2 className='text-center text-4xl font-bold text-gray-200'>
+    <h2 className='text-center text-4xl font-bold text-gray-900 dark:text-gray-200'>
       <Message service={service} />
     </h2>
   )
